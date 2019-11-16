@@ -1,0 +1,26 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "minima";
+
+.site-title {
+    font-size: 3em;
+    letter-spacing: -1px;
+    margin-bottom: 0;
+    float: left;
+    font-weight: 100;
+    font-family: 'EB Garamond', serif;
+
+    font-weight: normal;
+    color: $grey-color-dark;
+    text-decoration: underline;
+
+    &:hover {
+        color: $grey-color;
+    }
+}
+
+.page-content {
+    flex: none;
+}

@@ -1,0 +1,31 @@
+# Site settings
+title: Alexander Rudy
+email: hello@alexrudy.org
+description: >
+  This is my home page, and a landing for a few personal projects.
+  I am a Data Scientist, currently at bitly.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://alexrudy.org" # the base hostname & protocol for your site
+
+twitter_username: alexrudy
+github_username:  alexrudy
+linkedin_username: alexrudy
+
+# Use the default theme
+theme: minima
+
+# Collection Settings
+collections:
+
+# Build settings
+markdown: kramdown
+gems:
+  - jekyll-redirect-from
+  
+# Defaults
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      nav: yes
