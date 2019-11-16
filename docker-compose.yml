@@ -9,7 +9,7 @@ services:
   nginx-alexrudy-org:
     build: .
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - ./_site:/usr/share/nginx/html
     networks:
