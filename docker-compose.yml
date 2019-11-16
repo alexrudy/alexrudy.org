@@ -10,10 +10,9 @@ services:
     build: .
     ports:
       - "8000:80"
-    volumes:
-      - ./_site:/usr/share/nginx/html
     networks:
       - reverse-proxy
     environment:
-      - VIRTUAL_HOST=alexrudy.org
+      - VIRTUAL_HOST=www.alexrudy.org
+      - LETSENCRYPT_HOST=www.alexrudy.org
     restart: unless-stopped
