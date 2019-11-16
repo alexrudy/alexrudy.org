@@ -7,8 +7,7 @@ networks:
 
 services:
   nginx-alexrudy-org:
-    image: nginx
-    container_name: nginx
+    build: .
     ports:
       - "80:80"
     volumes:
