@@ -1,0 +1,20 @@
+version: '3.4'
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
+
+services:
+  nginx-alexrudy-org:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./_site:/usr/share/nginx/html
+    networks:
+      - reverse-proxy
+    environment:
+      - VIRTUAL_HOST=alexrudy.org
+    restart: unless-stopped
