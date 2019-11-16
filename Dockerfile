@@ -14,5 +14,5 @@ ENV LANGUAGE en_US.UTF-8
 
 ADD . /src/jekyll-site
 WORKDIR /src/jekyll-site
-RUN bundler exec jekyll build
+RUN bundle exec jekyll build
 RUN cp -r /src/jekyll-site/_site/* /usr/share/nginx/html
