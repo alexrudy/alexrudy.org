@@ -1,0 +1,5 @@
+version: '3.4'
+
+services:
+  nginx-alexrudy-org:
+    image: docker.alexrudy.local/alexrudy-jekyll:latest 

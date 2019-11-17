@@ -7,7 +7,7 @@ networks:
 
 services:
   nginx-alexrudy-org:
-    build: .
+    image: docker.alexrudy.net/alexrudy-jekyll:latest
     ports:
       - "8000:80"
     networks:
