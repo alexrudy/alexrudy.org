@@ -6,7 +6,7 @@ networks:
       name: reverse-proxy
 
 services:
-  nginx-alexrudy-org:
+  nginx-alexrudy:
     image: docker.alexrudy.net/alexrudy-jekyll:latest
     ports:
       - "8000:80"
