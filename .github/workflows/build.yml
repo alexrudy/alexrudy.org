@@ -1,0 +1,22 @@
+name: Build Jekyll Website
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Log in to registry
+        env:
+          DOCKER_REGISTRY_USERNAME: docker@alexrudy.org
+          DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+        run: |
+          docker login docker.alexrudy.net -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD
+      - name: Build Image
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
+      - name: Push Image
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.ci.yml push
