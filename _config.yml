@@ -22,6 +22,11 @@ markdown: kramdown
 gems:
   - jekyll-redirect-from
   
+exclude:
+  - docker-compose*.yml
+  - Dockerfile
+  - README.md
+
 # Defaults
 defaults:
   -
