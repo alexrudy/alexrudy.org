@@ -3,3 +3,9 @@ version: '3.4'
 services:
   nginx-alexrudy:
     image: docker.alexrudy.local/alexrudy-jekyll:latest 
+    environment:
+      - VIRTUAL_HOST=www.alexrudy.local
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/src/jekyll-site
