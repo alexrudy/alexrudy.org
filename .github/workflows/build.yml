@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Log in to registry
         env:
-          DOCKER_REGISTRY_USERNAME: docker@alexrudy.org
+          DOCKER_REGISTRY_USERNAME: docker@alexrudy.net
           DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
         run: |
           docker login docker.alexrudy.net -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD

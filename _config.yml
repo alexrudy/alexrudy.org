@@ -1,11 +1,11 @@
 # Site settings
 title: Alexander Rudy
-email: hello@alexrudy.org
+email: hello@alexrudy.net
 description: >
   This is my home page, and a landing for a few personal projects.
   I am a Data Scientist, currently at bitly.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://alexrudy.org" # the base hostname & protocol for your site
+url: "https://alexrudy.net" # the base hostname & protocol for your site
 
 twitter_username: alexrudy
 github_username:  alexrudy
