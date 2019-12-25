@@ -23,10 +23,12 @@ def dc(c, command, **kwargs):
     c.run(f"docker-compose -f docker-compose.yml -f docker-compose.dev.yml {command}", **kwargs)
 
 @t(aliases=("s", "server"))
-def serve(c):
+def serve(c, detach=False):
     """Run the draft server."""
     c.config.run.pty = True
-    dc(c, "exec nginx-alexrudy bundle exec jekyll serve --watch --drafts --host 0.0.0.0")
+    detach = "-d" if detach else ""
+
+    dc(c, f"exec {detach} nginx-alexrudy bundle exec jekyll serve --watch --drafts --host 0.0.0.0")
 
 @t()
 def up(c):
@@ -42,3 +44,16 @@ def down(c):
 def build(c):
     """Build the Jekyll container"""
     dc(c, "-f docker-compose.ci.yml build")
+
+
+@t(aliases=("bash",))
+def shell(c):
+    """Run a shell in the container."""
+    c.config.run.pty = True
+    dc(c, "exec nginx-alexrudy /bin/bash")
+
+@t()
+def logs(c):
+    """Run a shell in the container."""
+    c.config.run.pty = True
+    dc(c, "logs")

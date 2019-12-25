@@ -6,6 +6,6 @@ services:
     environment:
       - VIRTUAL_HOST=www.alexrudy.local
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     volumes:
       - .:/src/jekyll-site
