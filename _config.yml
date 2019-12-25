@@ -13,6 +13,7 @@ linkedin_username: alexrudy
 
 # Use the default theme
 theme: minima
+show_excerpts: true
 
 # Collection Settings
 collections:

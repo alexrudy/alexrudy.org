@@ -14,12 +14,17 @@ I use [supertunnel][st] to open port forwarding to my jupyter notebooks when I'm
 
 You can install [supertunnel][st] via pip:
 ```
-pip install supertunnel
+$ pip install supertunnel
 ```
 
 Then, use it like this:
 ```
-st jupyter --auto jupyter.example.com
+$ st jupyter --auto jupyter.example.com
+Locating jupyter notebooks...
+1) http://localhost:8888/?token=deadbeef8765432112345678abcdef (/home/alexrudy)
+Discovered ports localhost:8888
+^C to exit
+[connected] 0:00:11 |
 ```
 
 

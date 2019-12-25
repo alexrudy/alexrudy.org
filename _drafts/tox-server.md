@@ -16,18 +16,22 @@ The right solution here is to do nothing, and live with one of the potential sol
 The usage is pretty simple. It requires 2 TCP ports (one for commands, one to stream output back to the client). On your remote host (where you want [tox][] to actually run):
 
 ```
-$ tox-server serve
+$ tox-server -p9876 serve
+[tox-server] Serving on tcp://127.0.0.1:9876
+[tox-server] Output on tcp://127.0.0.1:9877
+[tox-server] ^C to exit.
 ```
 
-By default, [tox-server][] uses port 7654 for control commands, and 7655 to publish program output. To communicate with the server, use the same `tox-server` command:
+[tox-server][] does not choose consistent ports for you by default, you must give it at least the port you want to use for controlling the server. It will use one port higher for the streaming port, unless you specify that with the `-s` option. It also obeys the environment variables `TOX_SERVER_PORT` and `TOX_SERVER_STREAM_PORT` to change the two ports to known values. To communicate with the server, use the same `tox-server` command as a client:
 
 ```
 $ tox-server run
+GLOB sdist-make: ...
 ```
 
 Any arguments to `tox-server run` are forwarded to `tox` on the remote host.
 
-By default, [tox-server][] binds to `localhost`. To expose [tox-server][] (there is no authentication mechansim, so don't really expose it to the world), you should bind it to `0.0.0.0` with `tox-server run -b 0.0.0.0`.
+By default, [tox-server][] binds to `127.0.0.1` (localhost). To expose [tox-server][] (there is no authentication mechansim, so don't really expose it to the world), you should bind it to `0.0.0.0` with `tox-server run -b 0.0.0.0`.
 
 [tox-server]: https://github.com/alexrudy/tox-server
 [tox]: https://tox.readthedocs.io
