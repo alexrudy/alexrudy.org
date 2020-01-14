@@ -44,7 +44,12 @@ def down(c):
 def build(c):
     """Build the Jekyll container"""
     dc(c, "-f docker-compose.ci.yml build")
+    dc(c, "-f docker-compose.ci.yml push")
 
+@t()
+def push(c):
+    """Build the Jekyll container"""
+    dc(c, "-f docker-compose.ci.yml push")
 
 @t(aliases=("bash",))
 def shell(c):
