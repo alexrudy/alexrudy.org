@@ -5,9 +5,7 @@ permalink: /about/
 ---
 
 
-Hi! I'm Alexander Rudy. I'm a Data Scientist at [bitly][]. I use the traffic flowing through bit.ly to understand conversations on the internet. [Bitly][bitly] has been around the internet since 2008, when it rose to fame as the
-default link shortner for Twitter. Now, [bitly][] sees a huge amount traffic from all over the web. I'm levearging
-that data, using [bitly][] to learn from an internet you can see across.
+Hi! I'm Alexander Rudy. I'm a Data Scientist at [bitly][]. I use the traffic flowing through [bitly][] to understand conversations on the internet. [Bitly][bitly] has been around the internet since 2008, when it rose to fame as the default link shortner for Twitter. Now, [bitly][] sees a huge amount traffic from all over the web. I'm levearging that data, using [bitly][] to learn from an internet you can see across.
 
 I approach and model the world scientifically – I try to understand the why as well as the how. The modeling I do
 is not about just shoving everything into the black box. I try to embody the scientist -- where models represent our
