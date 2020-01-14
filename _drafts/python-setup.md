@@ -8,8 +8,9 @@ Setting up a good python environment for development can be pretty thorny -- lar
 $ /usr/bin/python --version
 Python 2.7.16
 ```
-
 and installing packages globally in the system python can result in a number of problems. Conflicting requirements, difficult upgrades, and poor isolation if you want to share your work or move from one environment to another.
+
+<!--more-->
 
 There are a hunderd and one different ways to set up a python environment -- this is mine. It may not be the best, but there are a number of aspects I really like about it:
 
@@ -236,8 +237,23 @@ I try to install any end-user program, written in python, which shouldn't be tra
 
 # Principles
 
+This can all feel like a bit of a precarious setup -- look away, and you'll find yourself in python dependency hell, or with things that don't work properly. Here are a few principles that I try to keep to make my life easier:
+
+1. Every project I work on gets its own virtual envrionment. Even if they are co-dependent, each one gets a separate environment. This means if stuff breaks, I can delete the virtual environment and start again.
+2. I make liberal use of `pip install -e .` to install the current directory as a python package. This relies on propertly setting up your projects as python packages, but is a huge help to making things work consistently.
+3. `PYTHONPATH` is an escape hatch -- it lets you dynamically add things to python's path on startup. Use it only as an escape hatch, and rely otherwise on your virtual environment and `pip` or `pipenv` to manage installations. If you find yourself having to set `PYTHONPATH` for a project, or for your shell overall, something has gone wrong.
+4. Don't be afraid to use python to debug itself. If you are having trouble with a dependency, using `import numpy; print(numpy.__file__)` can be a great way to figure out what might have gone wrong. Or `import sys; print(sys.path)` if you need to understand where python is looking for modules.
+5. When something does go wrong, spend some time figuring out how to make it work well in the future. I try to not break this setup for small things. For example, if you have a tool which can't find the right python version, I'd rather write a shell script which finds or hard-codes the correct interpreter, than mess with what I've set up above.
+
 # Alternatives
 
+There are many alternatives to all of this -- some are listed below, with a brief note on why I don't use them:
+
+1. Rely on your system package manager to install multiple versions of python (e.g. `brew` or `apt-get`). This is fine, but it can be diffcult to control exactly which version of python you are working against, and even more difficult to run code against 2 different versions of e.g. python3.
+2. Use the builtin [venv](https://docs.python.org/3/library/venv.html), or [virtualenv](https://virtualenv.pypa.io/), or [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/). I've used all of these tools before, but I prefer having pyenv manage all of my python versions in one place.
+3. [Conda](https://docs.conda.io/) is a tool for managing lots of aspects of python environments and scientific computing environments. Its a bit simpler than this setup, but can be a bit trickier to customize in my experience, and does some non-standard things (like bundling a lot of common shell tools). Its great for perfectly consistent environments, but heavy handed for my needs.
+
+Any of these might work for you -- go for it! I'm not saying these tools are bad, just that they aren't in my current arsenal.
 
 ---
 
