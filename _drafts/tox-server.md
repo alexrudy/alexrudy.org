@@ -39,13 +39,17 @@ By default, [tox-server][] binds to `127.0.0.1` (localhost). To expose [tox-serv
 
 ## Shutting it down
 
-The server can be shut down with a quit command from the client, or killed via signal. The quit command is
+The server can be shut down with a quit command from the client, or killed via signal. The quit command is:
 
 ```
 tox-server quit
 ```
 
-There is a healthcheck command, `ping`, which will just respond with the server's notion of the current time.
+There is a healthcheck command, `ping`, which will just respond with the server's notion of the current time:
+
+```
+tox-server ping
+```
 
 
 ## Under the hood
