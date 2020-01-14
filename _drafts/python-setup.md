@@ -3,12 +3,12 @@ layout: post
 title: "A python environment"
 ---
 
-Setting up a good python environment for development can be pretty thorny -- largely because using your system python, and installing packages with `pip`, is often a bad idea. On MacOS, the system python is usually old version:
+Setting up a good python environment for development can be pretty thorny -- largely because using your system python and installing packages globally with `pip`, is often a bad idea. On MacOS, the system python is usually old version:
 ```
 $ /usr/bin/python --version
 Python 2.7.16
 ```
-and installing packages globally in the system python can result in a number of problems. Conflicting requirements, difficult upgrades, and poor isolation if you want to share your work or move from one environment to another.
+and installing packages globally in the system python can result in conflicting requirements, difficult upgrades, and poor isolation if you want to share your work or move from one environment to another.
 
 <!--more-->
 
@@ -239,11 +239,18 @@ I try to install any end-user program, written in python, which shouldn't be tra
 
 This can all feel like a bit of a precarious setup -- look away, and you'll find yourself in python dependency hell, or with things that don't work properly. Here are a few principles that I try to keep to make my life easier:
 
-1. Every project I work on gets its own virtual envrionment. Even if they are co-dependent, each one gets a separate environment. This means if stuff breaks, I can delete the virtual environment and start again.
-2. I make liberal use of `pip install -e .` to install the current directory as a python package. This relies on propertly setting up your projects as python packages, but is a huge help to making things work consistently.
-3. `PYTHONPATH` is an escape hatch -- it lets you dynamically add things to python's path on startup. Use it only as an escape hatch, and rely otherwise on your virtual environment and `pip` or `pipenv` to manage installations. If you find yourself having to set `PYTHONPATH` for a project, or for your shell overall, something has gone wrong.
-4. Don't be afraid to use python to debug itself. If you are having trouble with a dependency, using `import numpy; print(numpy.__file__)` can be a great way to figure out what might have gone wrong. Or `import sys; print(sys.path)` if you need to understand where python is looking for modules.
-5. When something does go wrong, spend some time figuring out how to make it work well in the future. I try to not break this setup for small things. For example, if you have a tool which can't find the right python version, I'd rather write a shell script which finds or hard-codes the correct interpreter, than mess with what I've set up above.
+1. I need to be able to run several different versions of python simultaneously, even if I try to do all of my development only on the latest version. At any given time, some projects aren't yet compatible with the latest python release, and the freedom to change versions and upgrade only when I want to is important to me.
+2. Every project I work on gets its own virtual envrionment. Even if they are co-dependent, each one gets a separate environment. This means if stuff breaks, I can delete the virtual environment and start again.
+3. I make liberal use of `pip install -e .` to install the current directory as a python package. This relies on propertly setting up your projects as python packages, but is a huge help to making things work consistently.
+4. End user applications (like [tmuxp][]) should not impact my current project or virtual environment. Their dependencies cloud which dependencies are actually used by my projects, and make things more difficult to isolate and share.
+5. Once a python environment is set up, it should be hard for me to mis-use that environment in the future. Thats what I love about `pyenv local` and `.python-version` files in my projects.
+
+
+`PYTHONPATH` is an escape hatch -- it lets you dynamically add things to python's path on startup. Use it only as an escape hatch, and rely otherwise on your virtual environment and `pip` or `pipenv` to manage installations. If you find yourself having to set `PYTHONPATH` for a project, or for your shell overall, something has gone wrong.
+
+Don't be afraid to use python to debug itself. If you are having trouble with a dependency, using `import numpy; print(numpy.__file__)` can be a great way to figure out what might have gone wrong. Or `import sys; print(sys.path)` if you need to understand where python is looking for modules.
+
+When something does go wrong, spend some time figuring out how to make it work well in the future. I try to not break this setup for small things. For example, if you have a tool which can't find the right python version, I'd rather write a shell script which finds or hard-codes the correct interpreter, than mess with what I've set up above.
 
 # Alternatives
 
