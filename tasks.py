@@ -48,7 +48,7 @@ def build(c):
 
 @t()
 def push(c):
-    """Build the Jekyll container"""
+    """Push the Jekyll container"""
     dc(c, "-f docker-compose.ci.yml push")
 
 @t(aliases=("bash",))
