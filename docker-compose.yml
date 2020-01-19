@@ -11,6 +11,6 @@ services:
     networks:
       - reverse-proxy
     environment:
-      - VIRTUAL_HOST=www.alexrudy.net,alexrudy.net,www.alexrudy.net,alexrudy.net
-      - LETSENCRYPT_HOST=www.alexrudy.net,alexrudy.net,www.alexrudy.net,alexrudy.net
+      - VIRTUAL_HOST=www.alexrudy.net,alexrudy.net
+      - LETSENCRYPT_HOST=www.alexrudy.net,alexrudy.net
     restart: unless-stopped
