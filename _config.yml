@@ -27,6 +27,8 @@ exclude:
   - docker-compose*.yml
   - Dockerfile
   - README.md
+  - tasks.py
+  - scripts
 
 # Defaults
 defaults:

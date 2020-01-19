@@ -106,12 +106,12 @@ Although you could set all of these environment variables once in your shell, I'
 ### Always getting the latest python version
 
 I also recommend installing [xxenv-latest][], a tool for getting the latest version installed (so you don't have to remember what the most recent version of python is). With `pyenv-latest` set up, you can run this command on macos to install the latest version:
-```zsh
-pyenv macbuild $(pyenv latest --print)
+```
+$ pyenv macbuild $(pyenv latest --print)
 ```
 On other systems (not macos), you can run
 ```
-pyenv latest install
+$ pyenv latest install
 ```
  to achieve the same effect. Unfortunately, the `pyenv-macbuild` shim above doesn't integrate with `pyenv latest` right now.[^1]
 
@@ -119,23 +119,23 @@ pyenv latest install
 
 Now you can install multiple versions of python on your system, and [pyenv][] will do a decent job keeping them separate. However, if you have no version of python selected, [pyenv][] will conservatively assume nothing, and not let you run any python commands. I recommend you set a global python version. Really, I recommend two global python versions, so that you always have a copy of `python` at your fingertips, and so that `python2` on your command line still points to an old copy of python2[^2]. To do this, I use the `pyenv global` command, which I have set to the following:
 
-```zsh
-pyenv global 3.7.5 2.7.16
+```
+$ pyenv global 3.7.5 2.7.16
 ```
 
 This means that globally, **unless you override this setting**, binaries normally made available by python 3 or python 2, will default to using python 3.7.5 first and 2.7.16 if they can't be found. So the `python` command, and the `python3` command will both point to 3.7.5, and the `python2` command will point to 2.7.16. The same logic applies to the `pip`, `pip3`, and `pip2` commands.
 
-A really awesome feature of pyenv is that you can locally override python versions on a per-directory basis, using the `pyenv local` command, which just adds your python version to a file `.python-version` in the current directory[^3].
+A really awesome feature of pyenv is that you can locally override python versions on a per-directory basis, using the `pyenv local` command, which just adds your python version to a file `.python-version` in the current directory[^3]. Whenever you are in a directory with a `.python-version` file, or any parent directory contains a `.python-version` file, the settings from that `.python-version` file will supercede your global pyenv version settings.
 
-For even more local work, you can use `pyenv shell` to override the python version in only the **current shell** and its decendents.
+For even more local work, you can use `pyenv shell` to override the python version in only the *current shell* and its decendents.
 
 ## Virtual Environments
 
-[pyenv][] provides a way to install different python *versions*, but it doesn't isolate python environments (ignore the "env" in the name). As such, if we start or work on two separate projects, both of which we develop against python 3.7.5, we'll need some way to keep the requirements of those projects separate. This is good both because different projects might have requirements which conflict, and because its good to isolate your project and ensure that you are testing it against *only* the required dependencies, not silently introducting other dependencies into your workspace.
+[pyenv][] provides a way to install different python *versions*, but it doesn't isolate python environments (ignore the "env" in the name). If we start or work on two separate projects, both of which we develop against python 3.7.5, we'll need some way to keep the requirements of those projects separate. This is good both because different projects might have requirements which conflict, and because its good to isolate your project and ensure that you are testing it against *only* the required dependencies, not silently introducting other dependencies into your workspace.
 
-The traditional ways of managing virtual environments are *fine*, but they don't integrate with `pyenv`, and so don't respect the handy `.python-version` file used to set local python versions. I think this integration is pretty critical to a seamless python workflow. I really dislike having to remember to *activate* and *deactivate* a python environment when I start or stop working on a project. I'd rather just have that environment *just work* when I'm in a project directory, developing.
+The traditional ways of managing virtual environments are *fine*, but they don't integrate with `pyenv`, and so don't respect the handy `.python-version` file used to set local python versions. I find this integration is critical to my python workflow. I really dislike having to remember to *activate* and *deactivate* a python environment when I start or stop working on a project. I'd rather just have that environment *just work* when I'm in a project directory.
 
-Enter [pyenv-virtualenv]. It lets you set up virtual environments which behave like full pyenv versions, and can be selected with commands like `pyenv global` and `pyenv local`. Install it following the [installation instructions](https://github.com/pyenv/pyenv-virtualenv#installation) or using homebrew if you are on macos (`brew install pyenv-virtualenv`). Be sure to follow the step about adding `eval $(pyenv virtualenv-init)` to your shell initialization functions. If you've done that using the snipped in the section above, you can modify it as follows:
+Enter [pyenv-virtualenv]. It lets you set up virtual environments which behave like full pyenv versions, and can be selected with commands like `pyenv global` and `pyenv local`. Install it following the [installation instructions](https://github.com/pyenv/pyenv-virtualenv#installation) or using homebrew if you are on macos (`brew install pyenv-virtualenv`). Be sure to follow the step about adding `eval $(pyenv virtualenv-init)` to your shell initialization functions. If you've done that using the gist in the section above, you can modify it as follows:
 ```zsh
 # somewhere in your .bash_profile or .zshrc
 
@@ -166,7 +166,14 @@ This makes for a pretty straight-forward workflow when starting work on a new (o
 
 Now, whenever you are in the project directory, `pyenv` will select the appropraite python version and virtual environment.
 
-This setup should play well with other tools which rely on virtual environments (e.g. my ZSH prompt which shows the virtual environment "just works", and [pipenv][] properly recognizes the virtual environment you already have set up).
+For example, to set up a virtual environment for working on a project called `frobulator`:
+```
+$ cd ~/projects/frobulator/
+$ pyenv virtualenv 3.7.5 frobulator
+$ pyenv local frobulator
+```
+
+This setup should play well with other tools which rely on virtual environments (e.g. my zsh prompt which shows the virtual environment "just works", and [pipenv][] properly recognizes the virtual environment you already have set up).
 
 If you've been following along and adding custom `pyenv` commands like `pyenv macbuild` above, you can add a pyenv command which automates the process of creating a virtual environment. Mine is called [`pyenv project`]() and looks like this:
 ```zsh
@@ -180,7 +187,6 @@ If you've been following along and adding custom `pyenv` commands like `pyenv ma
 # in the project directory to use the new virtual environment. Run this once, and in
 # the future, when you are in the project directory, pyenv will default to using your
 # virutal environment.
-
 
 set -e
 [ -n "$PYENV_DEBUG" ] && set -x
@@ -199,7 +205,7 @@ pyenv-virtualenv $PYENV_TARGET_VERSION $VIRTUALENV_NAME
 pyenv-local $VIRTUALENV_NAME
 ```
 
-Now you should have a working python environment. If it isn't working, continuing won't really help. When you find problems, feel free to submit a pull request or issue against [this blog post](https://github.com/alexrudy/alexrudy.net).
+Now you should have a working python environment. If it isn't working, continuing won't really help. When you solve problems, feel free to submit a pull request or issue against [this blog post](https://github.com/alexrudy/alexrudy.net).
 
 ## Installing Python Dependencies
 
@@ -209,33 +215,39 @@ There are a few good options (and many strongly held opinions) about how to inst
 
 For quick projects or interactive work that I don't care about deploying or making repeatable, I'll rely on `pip install` to grab the dependencies that I need. When it turns out that I do need to share the quick and interactive projects I've been working on, running `pip freeze > requirements.txt` is usually good enough to have a saved environment I can pass along to a colleague or friend.
 
+For some projects, it can make sense to leverage [pip-tools](https://pypi.org/project/pip-tools/), which provides commands to help pin your requirements in a `requirements.txt` file, and upgrade them when they are outdated.
+
 ### Use Pipenv for applications
 
-For applications, or other projects which I might deploy some day, I tend to reach for [pipenv][], which is a tool that is quite opinionated, but pretty good at installing precisely the versions of packages that you want. There are several downsides to [pipenv][] (its so opinionated it can be inflexible, there are a couple of corner case bugs that complex projects might run into while upgrading dependencies, its hard to debug, and its slow to install and slow to lock dependencies, to name a few), but it works pretty well, and feels like a much better solution than maintaining a pile of `requirements.txt` files with pinned versions. 
+For applications, or other projects which I might deploy some day, I tend to reach for [pipenv][][^4], which is a tool that is quite opinionated, but pretty good at installing precisely the versions of packages that you want. There are several downsides to [pipenv][] (its so opinionated it can be inflexible, there are a couple of corner case bugs that complex projects might run into while upgrading dependencies, its hard to debug, and its slow to install and slow to lock dependencies, to name a few), but it works pretty well, and feels like a much better solution than maintaining a pile of `requirements.txt` files with pinned versions. 
 
 I find [pipenv][] works really well for applications with a lot of dependencies which probably won't change very often, but where you want the flexibility of fixing some versions, and letting other dependency versions float. [pipenv][] lets you express your applications requirements (installing depenncies using `pipenv install`) and then control upgrades (by running `pipenv upgrade`) to ensure that there is a consistent source of truth for your dependencies. You can then commit your machine-readable `Pipfile.lock` along side your `Pipfile`, to ensure that your requirements don't change on your end users.
+
+### Use Poetry for applications
+
+I've heard great things about [poetry][], but I haven't yet exercised it. It is definitely worth a look, especially if you find [pipenv][] isn't for you.
 
 ## Install end-user applications with [pipx][]
 
 Sometimes you want to install a python tool which isn't really a member or dependency in a single project, or which you want to run from everywhere. My go-to example for this category is [tmuxp][], a way to save and reload tmux sessions which deserves a blog post of its own. I want to use [tmuxp][] from anywhere, and I don't really care for it to be tracked as a dependency of any particular project. It has been stable for a while, and the tool version isn't as important to me as my ability to start and stop tmux sessions at will. I therefore install [tmuxp][] using [pipx][].
 
 On macos, you can install pipx with
-```zsh
-brew install pipx
-pipx ensurepath
+```
+$ brew install pipx
+$ pipx ensurepath
 ```
 or you can install `pipx` using `pip`. If you go the non-homebrew way, I recommend installing `pipx` with your favorite python version. This is mostly fine, but if you installed `pipx` in your global python 3.7.5 installation (a fine choice in this case), it won't be accessible when you are in a project which sets a different python version (or virtual environment) using `.python_version`. `pipx` is the only command where this isn't the desired behavior (`pipx` should be globally availalbe and not dependent on your python projects, most other python commands should follow a particular project around).
 
 You should also ensure that the `pipx` path components are **before** the pyenv ones, so that programs installed with `pipx` take precedence over `pyenv` versions. This means that `.local/bin` should be before `.pyenv/shims` in your path.
 
 Now you can install python end user programs like `tmuxp` using `pipx` in much the same way you would have used `pip`:
-```zsh
-pipx install tmuxp
+```
+$ pipx install tmuxp
 ```
 
 [pipx][] will create an isolated virtual environment just for [tmuxp][] in this case, install it there, and make the [tmuxp][] binary accessible on your path.
 
-I try to install any end-user program, written in python, which shouldn't be tracked as a project dependency and which also shouldn't interact with other python dependencies, using [pipx][]. For me, this means I've installed [tmuxp][], my own tool [SuperTunnel](/2019/11/17/supertunnel.html), [cookiecutter](https://cookiecutter.readthedocs.io/) and [pre-commit](https://pre-commit.com) using [pipx][]. Everything else is really a project dependency, and gets installed in a specific project virtual environment.
+I try to install end-user programs, written in python which shouldn't be tracked as a project dependency and which also shouldn't interact with other python dependencies, using [pipx][]. For me, this means I've installed [tmuxp][], my own tool [SuperTunnel](/2019/11/17/supertunnel.html), [cookiecutter](https://cookiecutter.readthedocs.io/) and [pre-commit](https://pre-commit.com) using [pipx][]. Everything else is really a project dependency, and gets installed in a specific project virtual environment.
 
 # Principles
 
@@ -258,17 +270,20 @@ When something does go wrong, spend some time figuring out how to make it work w
 
 There are many alternatives to all of this -- some are listed below, with a brief note on why I don't use them:
 
-1. Rely on your system package manager to install multiple versions of python (e.g. `brew` or `apt-get`). This is fine, but it can be diffcult to control exactly which version of python you are working against, and even more difficult to run code against 2 different versions of e.g. python3.
-2. Use the builtin [venv](https://docs.python.org/3/library/venv.html), or [virtualenv](https://virtualenv.pypa.io/), or [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/). I've used all of these tools before, but I prefer having pyenv manage all of my python versions in one place.
-3. [Conda](https://docs.conda.io/) is a tool for managing lots of aspects of python environments and scientific computing environments. Its a bit simpler than this setup, but can be a bit trickier to customize in my experience, and does some non-standard things (like bundling a lot of common shell tools). Its great for perfectly consistent environments, but heavy handed for my needs, and hard to tune or strip down to just what I want.
+- Rely on your system package manager to install multiple versions of python (e.g. `brew` or `apt-get`). This is fine, but it can be diffcult to control exactly which version of python you are working against, and even more difficult to run code against 2 different versions of e.g. python3.
+- Use the builtin [venv](https://docs.python.org/3/library/venv.html), or [virtualenv](https://virtualenv.pypa.io/), or [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/). I've used all of these tools before, but I prefer having pyenv manage all of my python versions in one place.
+- [Conda](https://docs.conda.io/) is a tool for managing lots of aspects of python environments and scientific computing environments. Its a bit simpler than this setup, but can be a bit trickier to customize in my experience, and does some non-standard things (like bundling a lot of common shell tools). Its great for perfectly consistent environments, but heavy handed for my needs, and hard to tune or strip down to just what I want.
 
 Any of these might work for you -- go for it! I'm not saying these tools are bad, just that they aren't in my current arsenal.
 
 ---
 
+<br />
+
 [^1]: Pull requests welcome in my [dotfiles][]
 [^2]: Python2 isn't dead yet, and some places (I'm looking at you, google cloud tools 😒) still haven't ported their work to python3, but rely on a system python interpreter.
 [^3]: I use this in projects under source control with git all the time, and so I've added `.python-version` to my list of global git ignores, so that I don't commit my python version preferences. You'll see why this is important (and why python names in `.python-version` aren't necessarily universal) in the [Virtual Environments](#virtual-environments) section.
+[^4]: There was a lot of drama in the python community around the original creator of [pipenv][], Kenneth Reitz. The [pipenv][] project is pretty well divorced from that drama at this point, and Kenneth Reitz is no longer the maintainer.
 
 [homebrew]: https://brew.sh
 [dotfiles]: https://github.com/alexrudy/dotfiles
