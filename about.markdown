@@ -4,6 +4,10 @@ title: About Me
 permalink: /about/
 ---
 
+<div class='image-box'>
+    <img width='200px' src='/images/alexrudy.jpeg'>
+</div>
+
 
 Hi! I'm Alexander Rudy. I'm a Data Scientist at [bitly][]. I use the traffic flowing through [bitly][] to understand conversations on the internet. [Bitly][bitly] has been around the internet since 2008, when it rose to fame as the default link shortner for Twitter. Now, [bitly][] sees a huge amount traffic from all over the web. I'm levearging that data, using [bitly][] to learn from an internet you can see across.
 
