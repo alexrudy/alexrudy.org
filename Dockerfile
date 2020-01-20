@@ -19,6 +19,7 @@ ADD Gemfile /src/jekyll-site/
 ADD Gemfile.lock /src/jekyll-site/
 RUN bundle install
 
+ARG JEKYLL_ENV=production
 ADD . /src/jekyll-site
 RUN bundle exec jekyll build
 

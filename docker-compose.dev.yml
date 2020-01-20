@@ -2,7 +2,10 @@ version: '3.4'
 
 services:
   nginx-alexrudy:
-    build: .
+    build:
+      context: .
+      args:
+        - JEKYLL_ENV=development
     image: docker.alexrudy.local/alexrudy-jekyll:latest 
     environment:
       - VIRTUAL_HOST=www.alexrudy.local
