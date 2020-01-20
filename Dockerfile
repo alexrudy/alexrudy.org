@@ -1,4 +1,4 @@
-FROM nginx
+FROM ubuntu AS builder
 
 # Ruby
 RUN apt-get -y update
@@ -6,16 +6,22 @@ RUN apt-get -y install ruby ruby-dev build-essential nodejs
 
 # Jekyll
 RUN gem install bundler
+RUN gem update --system
 
 # Environment
 ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-ADD . /src/jekyll-site
+# Gems
 WORKDIR /src/jekyll-site
+ADD Gemfile /src/jekyll-site/
+ADD Gemfile.lock /src/jekyll-site/
 RUN bundle install
-RUN bundle exec jekyll build
-RUN cp -r /src/jekyll-site/_site/* /usr/share/nginx/html
 
-COPY ./nginx/alexrudy.net.conf /etc/nginx/conf.d/default.conf
+ADD . /src/jekyll-site
+RUN bundle exec jekyll build
+
+FROM nginx
+COPY --from=builder /src/jekyll-site/_site/ /usr/share/nginx/html/
+COPY ./nginx/ /etc/nginx/conf.d/

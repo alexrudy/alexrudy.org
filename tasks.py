@@ -28,7 +28,7 @@ def serve(c, detach=False):
     c.config.run.pty = True
     detach = "-d" if detach else ""
 
-    dc(c, f"exec {detach} nginx-alexrudy bundle exec jekyll serve --watch --drafts --host 0.0.0.0")
+    c.run(f"bundle exec jekyll serve {detach} --watch --drafts --host 0.0.0.0")
 
 @t()
 def up(c):
@@ -43,13 +43,13 @@ def down(c):
 @t()
 def build(c):
     """Build the Jekyll container"""
-    dc(c, "-f docker-compose.ci.yml build")
-    dc(c, "-f docker-compose.ci.yml push")
+    dc(c, "build")
+    dc(c, "push")
 
 @t()
 def push(c):
     """Push the Jekyll container"""
-    dc(c, "-f docker-compose.ci.yml push")
+    dc(c, "push")
 
 @t(aliases=("bash",))
 def shell(c):
