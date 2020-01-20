@@ -1,5 +1,6 @@
 ---
 layout: home
+list_title: Blog Posts
 ---
 
 Hi! I'm Alexander Rudy. You've found my home page, which I'm keeping incredibly bare for
