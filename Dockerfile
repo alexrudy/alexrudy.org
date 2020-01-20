@@ -18,4 +18,5 @@ RUN bundle install
 RUN bundle exec jekyll build
 RUN cp -r /src/jekyll-site/_site/* /usr/share/nginx/html
 
-COPY ./nginx/alexrudy.net.conf /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx/* /etc/nginx/conf.d/*

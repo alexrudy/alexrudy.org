@@ -10,3 +10,4 @@ services:
       - "127.0.0.1:4000:4000"
     volumes:
       - .:/src/jekyll-site
+      - ./nginx/:/etc/nginx/conf.d/
