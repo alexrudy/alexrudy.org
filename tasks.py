@@ -28,7 +28,7 @@ def serve(c, detach=False):
     c.config.run.pty = True
     detach = "-d" if detach else ""
 
-    dc(c, f"exec {detach} nginx-alexrudy bundle exec jekyll serve --watch --drafts --host 0.0.0.0")
+    c.run(f"bundle exec jekyll serve {detach} --watch --drafts --host 0.0.0.0")
 
 @t()
 def up(c):
