@@ -6,8 +6,7 @@ services:
     image: docker.alexrudy.local/alexrudy-jekyll:latest 
     environment:
       - VIRTUAL_HOST=www.alexrudy.local
-    ports:
-      - "127.0.0.1:4000:4000"
+      - LETSENCRYPT_HOST=
     volumes:
       - .:/src/jekyll-site
       - ./nginx/:/etc/nginx/conf.d/
