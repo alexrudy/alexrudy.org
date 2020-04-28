@@ -7,6 +7,8 @@ Twice now, I've found myself with tests designed to run in a containerized envir
 
 <!--more-->
 
+I like writing unit tests, and I want those tests to run quickly, and provide rapid feedback as to whether my change worked. The best test suites can test a subsection or change in a matter of a second or two, and tell me if I've intoduced a bug (usually becasue I can't spell variable names consistently).
+
 I've often seen it suggested that instead of `docker run ...`, I should do `docker exec` to run a command in a container. That's pretty handy, but the command line arguments can be a bit finicky. You have to remember the container you are pointed at, and its still slow (especially in the compose case, where docker compose can take a while to understand the state of your system). I found myself instead running `docker exec bash` in a container, leaving that shell running in some tab, and going back there.
 
 That was great, but it really broke my finger memory to have one shell in `bash`, without my profile and my autocomplete setup. I could install [my environment](https://github.com/alexrudy/dotfiles) in the docker container, but that seems like a sledge-hammer solution to what is in the end a minor annoyance.
@@ -72,7 +74,7 @@ $ tox-server quit
 DONE
 ```
 
-# Building `tox-server`
+# Writing tox-server
 
 What frankenstien moster have I wrought? It's pretty simple. It is essentially an implementation of RPC ("remote process call"), where the client sends a command, and the server listens in a loop and responds to those commands. I used [ZeroMQ][] to implement the network protocol part, largely because I'm familiar with ZeroMQ, and it makes some aspects (e.g. protocol design, socket identification) pretty easy.
 
@@ -89,7 +91,7 @@ Since this gets quite long, here are a list of secitons:
     - [Building the Client](#building-the-client)
     - [Handling Interrupts](#handling-interrupts)
 - [My Experience with asyncio](#the-asyncio-experience): Some thoughts on [asyncio][]
-- [My Experience with `async/await`](#the-asyncawait-experience)
+- [My Experience with `async`/`await`](#the-asyncawait-experience): Some thoughts on using `async`/`await` in python
 
 ## Original Synchronous Design
 
@@ -108,7 +110,7 @@ All of this meant that adding features or making small changes felt hazardous. I
 
 ## Asynchronous Design
 
-One choice in my async work was clear: I had to use [asyncio][]. [pyzmq supports](https://pyzmq.readthedocs.io/en/latest/eventloop.html#) [asyncio][], [gevent](https://www.gevent.org) and [tornado](https://github.com/facebook/tornado) for asynchronous IO. I didn't want to use tornado or gevent (nothing against either one, but I wanted the full glory of native `async`/`await` syntax), and that left me with [asyncio][]. [trio][] and [curio][] are very nice libraries, but they don't support [ZeroMQ][] yet (or, probably better put, [pyzmq][] doesn't yet support them). I really didn't want to implement my own eventloop integration on my first asynchronous project.
+One choice in my async work was clear: I had to use [asyncio][]. [pyzmq supports](https://pyzmq.readthedocs.io/en/latest/eventloop.html#) [asyncio][], [gevent](https://www.gevent.org) and [tornado](https://github.com/facebook/tornado) for asynchronous IO. I didn't want to use tornado or gevent (nothing against either one, but I wanted the full glory of native `async`/`await` syntax), and that left me with [asyncio][]. [trio][] and [curio][] are very nice libraries, but they don't support [ZeroMQ][] yet (or, probably better put, [pyzmq][] doesn't yet support them)[^1]. I really didn't want to implement my own eventloop integration on my first asynchronous project.
 
 With that out of the way, the rest of the design started by reproducing the synchronous version, and slowly adding in various asynchronous concepts.
 
@@ -259,26 +261,64 @@ I spent a weekend writing my first piece of serious code with [asyncio][]. What 
 
 ### The Good Parts
 
-Python's `async/await` syntax was definitely helpful in getting this code running, and [asyncio][] provided a lot of the necessary batteries. The built in support for cancellation, creating new tasks, and introspecting task state is pretty nice.
+Python's `async`/`await` syntax was definitely helpful in getting this code running, and [asyncio][] provided a lot of the necessary batteries. The built in support for cancellation, creating new tasks, and introspecting task state is pretty nice.
 
-Writing concurrent, but not threaded code freed me from having to think about a lot of potential syncrhonization primatives and state. For [tox-server][], speed isn't really the primary concern, so the lack of true parallel processing was less important than easy to reason-about code. I did use two synchronization primatives, a lock and an event, but both were easy to understand and get right. If this code were truly parallel, it would require a lot more synchronization, or a different archtecture to prevent ZeroMQ sockets from running on separate threads.
+Writing concurrent, but not threaded code freed me from having to think about a lot of potential syncrhonization primatives and state. For [tox-server][], speed isn't really the primary concern, so the lack of true parallel processing was less important than easy to reason-about code. I did use two synchronization primatives, a lock and an event, but both were easy to understand and get right. If this code were truly parallel, it would require a lot more synchronization, or a different archtecture to prevent ZeroMQ sockets from running on separate threads[^2].
 
 The code also became much more testable. It was much easier to isolate the subprocess work from the main process, and testing can proceed leveraging [asyncio][] primatives like `Future` to represent discrete changes in state. Because the code is concurrent, but not in parallel, it is trivial to pause the state of the server, assert something about that state, and then resume the server in a test.
 
+I found writing async tests to be even better for inherently concurrent code. One simple quality of life improvement: timeouts. Often, when writing concurrent code, failure is a deadlock. This means having to manually interrupt running code, hope for a traceback, and debug from there. Instead, I wrote a quick wrapper for my async tests to add a timeout:
+
+```python
+F = TypeVar("F", bound=Callable)
+
+def asyncio_timeout(timeout: int) -> Callable:
+    def _inner(f: F) -> F:
+        @functools.wraps(f)
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
+            return await asyncio.wait_for(f(*args, **kwargs), timeout=timeout)
+
+        return wrapper
+
+    return _inner
+```
+
+This kind of timeout is difficult to correctly implement in pytest without aysncio, and behaves really poorly when interacting with [ZeroMQ][] in synchronous mode, but in asynchronous mode, it is a dream.
+
 ### The bad parts
 
-- Swallowing Errors
-- Difficult to reason about whether another `await` is necessary for concurrent coroutines
-- StreamReader.read is a pain, and returns too often.
-- Backpressure is kind of difficult. 
+Writing [asyncio][] ends up swallowing errors all over the place. The async code contains several places where I catch a `BaseException` only to log it, so that I can see some logger output. In other places, I can turn on asyncio debugging, and then watch for errors on stderr. This is less than ideal - I'd much rather have even these debugging messages raise real errors in my application, so that I can test that my loops don't leave dangling coroutines, or fail to await coroutines.
 
-Writing [asyncio][] ends up swallowing errors all over the place. The async code contains several places where I catch a `BaseException` only to log it, so that I can see some logger output
+I also find it difficult to reason about whether I need to provide an additional `await` for coroutines which I expect to cancel. In some places, I have found it helpful to add an `await` after canceling a task, to allow that task to finish, but I'm never really sure if that is necessary or correct. I found myself wishing for trio and curio's nursery concept, which provides a context within which all coroutines scheduled must finish.
 
-## The `async/await` Experience
+#### A StreamReader bug
 
-- Concurrent code is much easier to write.
-- I'm undecided about "function color", but maybe it is inverted?
-- Some non-[asyncio][] libraries have nicer primatives (e.g. trio's nursery)
+I found a big pain point in [StreamReader](https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamReader)'s `.read()` method. For `tox-server`, I want to read from a subprocess's `stdout` and `stderr`. Ideally, I'd like to read as often as possible, as many testing applications (like `pytest`, or `tox` in parallel mode) use ANSI escape codes and control sequences to animate output lines. Just sending each line of output isn't really good enough. Naively, I used `await stream.read(n=1024)`, basically asking the eventloop for _up to 1024_ bytes from the stream. Unfortunately, I found that only `await`-ing the stream resulted in a busy loop, where the output reader task would take-over and no other task would get a chance to run. To solve this, I had to check the stream for the EOF return `b""` on each loop iteration. Otherwise, in the EOF state, the stream would hog all of the processing power in the eventloop, and never give other tasks a chance to run. In the end, what I find surprising is not the use of `b""` as the sentinel for EOF, but rather that the loop ends up busy in the EOF state, and no other task gets an opportunity to run, but I guess that is to be expected.
+
+## The `async`/`await` Experience
+
+Nathan Smith wrote a good [blog post on the pitfalls and difficulties of asyncio](https://vorpus.org/blog/some-thoughts-on-asynchronous-api-design-in-a-post-asyncawait-world/) which I highly recommend. Some of the pain points I felt abover are probably related to the use of [asyncio][], and certainly having a feature like nurseries would have been helpful.
+
+However, this wasn't just an exercise in learning [asyncio][] for me – this was the first significant program I've every written using `async`/`await` in python. In the future, if I have an opportunity to write another asynchronous program, and I'm not bound to [asyncio][], I would definitely try one of the other libraires.
+
+### Colorful functions
+
+Finally, there is still something a little bit painful about having to add `await` in a lot of places. There is an allegory used for async programming: ["What color is your function?"](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) which demonstrates this problem in more detail, but to get down to it, why do we need to annotate our function calls with `await` anyhow? Some languages implicitly insert `await` where necessary (in particular, Go does a good job of doing this). The argument against inserting `await` implicitly is that it lets the programmer know where their program might be suspended.
+
+I'd argue that `await` isn't actually very useful as such. It does tell you whre your program _might_ return control to the event loop, but as in [the bug I squashed above](#a-streamreader-bug), `await` doesn't guarantee that the program will get interrupted. In fact, there is nothing to stop the following pathological function:
+```python
+async def evil():
+    while True:
+        pass
+```
+
+This busy-loop will run forever, and no amount of `asyncio.wait_for` with a timeout or `task.cancel()` will be able to interrupt it. What good am I doing as a programmer when I have to write `await evil()`?
+
+One might argue that `await` is necessary due to how `async`/`await` is implemented, but that doesn't seem like a good excuse. I'll admit I haven't explroed what python might look like without colorful functions, but I'd be interested to think more about how to make `async`/`await` a little less naieve than the `evil()` example above.
+
+# Wrapping Up
+
+For concurrent programming, and network I/O in general, I really like the `async`/`await` paradigm, and I'm excited to use it elsehwere (Rust? 😏). Its clear to me that there is still some work to be done, both in the libraries, but also in how we think about `async`/`await` syntax. I'm looking forward to another dive into the `async` python world.
 
 [tox-server]: https://github.com/alexrudy/tox-server
 [tox]: https://tox.readthedocs.io
@@ -290,3 +330,8 @@ Writing [asyncio][] ends up swallowing errors all over the place. The async code
 [selectors]: https://docs.python.org/3/library/selectors.html
 [trio]: https://trio.readthedocs.io/en/stable/
 [curio]: https://curio.readthedocs.io/en/latest/
+
+---
+
+[^1]: Honestly, ZMQ might not be the right tool for the job here, and I did consider switching to a plain old TCP socket, but ZMQ does provide a nice wire protocol (automatically length delimited), reslient connections, and the ability to trivially switch between transports by providing a differnt connection URI to ZMQ.
+[^2]: This kind of freedom and easy reasoning was so surprising, I found myself sometimes writing more complicated code, and then simplifying it when I realized I didn't need to account for some piece of shared state, since it isn't really "shared" in a single asyncio eventloop.
