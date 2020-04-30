@@ -1,12 +1,11 @@
-FROM ubuntu AS builder
+FROM ruby:2.7-buster AS builder
 
-# Ruby
-RUN apt-get -y update
-RUN apt-get -y install ruby ruby-dev build-essential nodejs
+# Install deps
+RUN apt-get -y update && \
+    apt-get -y install build-essential nodejs
 
-# Jekyll
-RUN gem install bundler
-RUN gem update --system
+# Install bundler
+RUN gem install bundler && gem update --system
 
 # Environment
 ENV LC_ALL C.UTF-8
@@ -14,15 +13,16 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 # Gems
-WORKDIR /src/jekyll-site
-ADD Gemfile /src/jekyll-site/
-ADD Gemfile.lock /src/jekyll-site/
+WORKDIR /srv/jekyll/
+ADD Gemfile /srv/jekyll/
+ADD Gemfile.lock /srv/jekyll/
 RUN bundle install
 
+
 ARG JEKYLL_ENV=production
-ADD . /src/jekyll-site
+ADD . /srv/jekyll
 RUN bundle exec jekyll build
 
 FROM nginx
-COPY --from=builder /src/jekyll-site/_site/ /usr/share/nginx/html/
+COPY --from=builder /srv/jekyll/_site/ /usr/share/nginx/html/
 COPY ./nginx/ /etc/nginx/conf.d/
