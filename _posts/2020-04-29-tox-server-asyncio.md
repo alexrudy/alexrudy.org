@@ -25,7 +25,7 @@ $ tox-server -p9876 -linfo serve
 [serve] ^C to exit
 ```
 
-[tox-server][] does not choose a port for you by default, you must give it the port you want to use for controlling the server. It also obeys the environment variable `TOX_SERVER_PORT` set and forget the port in your shell. To communicate with the server, use the same `tox-server` command as a client:
+[tox-server][] does not choose a port for you by default, you must give it the port you want to use for controlling the server. It also obeys the environment variable `TOX_SERVER_PORT` – so that you can set and forget the port in your shell. To communicate with the server, use the same `tox-server` command as a client:
 
 ```
 $ tox-server -p9876 run
@@ -34,7 +34,7 @@ GLOB sdist-make: ...
 
 Any arguments to `tox-server run` are forwarded to `tox` on the remote host.
 
-By default, [tox-server][] binds to `127.0.0.1` (localhost). To expose [tox-server][] (there is no authentication mechanism, so don't really expose it to the world, but in a local docker container, this might be okay), you should bind it to `0.0.0.0` with `tox-server run -b 0.0.0.0`.
+By default, [tox-server][] binds to `127.0.0.1` (localhost). To expose [tox-server][] (there is no authentication mechanism, so don't really expose it to the world, but in a local docker container, this might be okay), you should bind it to `0.0.0.0` with `tox-server -b 0.0.0.0 serve`. The bind also respects the environment variable `TOX_SERVER_BIND_HOST`.
 
 You can make the client communicate with a different host with the `-h` argument. But that often implies you've exposed [tox-server][] to the world, and thats a great way to have a huge security hole. Don't do that.
 
