@@ -30,6 +30,10 @@ exclude:
   - tasks.py
   - scripts
 
+header_pages:
+  - about.markdown
+  - cv.md
+
 # Defaults
 defaults:
   -
