@@ -33,13 +33,14 @@ Find me elsewhere online at [LinkedIn][], [Github][], or [Twitter][].
 
 # Experience
 
-## Senior Data Scientist 
+## Head of Data Science 
 
 **[Bitly](https://bitly.com) IQ -- San Francisco, CA** -- *August 2019 to Present*
 
-
-- Created a data science roadmap to leverage Bitly’s terabytes of data for a successful data business.
-- Trained and implemented state-of-the-art bot identification using a recursive neural network applied to the click stream.
+- Bootstrapped a data business from Bitly’s 23 billion clicks per month, selling privacy preserving consumer demand data.
+- Created NLP models to provide semantic tagging for billions of crawled internet pages across consumer industries.
+- Built a cloud-native machine learning pipeline for building models using TensorFlow on Bitly’s click history.
+- Trained and implemented state-of-the-art bot identification using a recursive neural network.
 - Developed a natural language approach to identifying suspicious and malicious URLs on the Bitly platform.
 
 ## Senior Data Scientist
