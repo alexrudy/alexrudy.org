@@ -37,11 +37,11 @@ Find me elsewhere online at [LinkedIn][], [Github][], or [Twitter][].
 
 **[Bitly](https://bitly.com) IQ -- San Francisco, CA** -- *August 2019 to Present*
 
-- Bootstrapped a data business from Bitly’s 23 billion clicks per month, selling privacy preserving consumer demand data.
-- Created NLP models to provide semantic tagging for billions of crawled internet pages across consumer industries.
-- Built a cloud-native machine learning pipeline for building models using TensorFlow on Bitly’s click history.
+- Responsible for the roadmap, hiring, and cross-functional prioritization for the Data Science team at Bitly.
+- Created NLP skip-gram models to provide semantic tagging for billions of crawled pages across consumer industries.
+- Built a cloud-native machine learning pipeline for building models using TensorFlow on Bitly’s click and web history.
 - Trained and implemented state-of-the-art bot identification using a recursive neural network.
-- Developed a natural language approach to identifying suspicious and malicious URLs on the Bitly platform.
+- Developed a natural language model to identify suspicious and malicious URLs on the Bitly platform.
 
 ## Senior Data Scientist
 **[Even](https://even.com) -- Oakland, CA – Founding member of the data team** -- *March 2018 to August 2019*
