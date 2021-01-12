@@ -18,6 +18,11 @@ def t(*args, **kwargs):
 def dc(c, command, **kwargs):
     c.run(f"docker-compose -f docker-compose.yml -f docker-compose.dev.yml {command}", **kwargs)
 
+@t()
+def install(c):
+    c.run("bundle install")
+
+
 @t(aliases=("s", "server"))
 def serve(c, detach=False):
     """Run the draft server."""
