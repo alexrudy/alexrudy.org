@@ -1,0 +1,4 @@
+source_up
+layout python3
+export COMPOSE_PROJECT_NAME=alexrudy-local
+PATH_add ./scripts/
