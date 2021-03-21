@@ -26,6 +26,7 @@ jobs:
       - name: Configure deployer
         uses: linode-sokka/deploy-tools@v1
         with:
+          host: https://deploy.alexrudy.net/
           project_name: alexrudynet
           token: ${{ secrets.DEPLOYER_TOKEN }}
           version: ${{ github.sha }}
