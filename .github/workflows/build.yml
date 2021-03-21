@@ -20,3 +20,14 @@ jobs:
       - name: Push Image
         run: |
           docker-compose -f docker-compose.yml -f docker-compose.ci.yml push
+      - name: Freeze configuration
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.ci.yml config > docker-compose-final.yml
+      - name: Configure deployer
+        uses: linode-sokka/deployer-tools@v1
+        with:
+          project_name: alexrudynet
+          token: ${{ secrets.DEPLOYER_TOKEN }}
+          version: ${{ github.sha }}
+          configuration: docker-compose-final.yml
+        
