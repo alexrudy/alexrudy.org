@@ -24,7 +24,7 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -f docker-compose.ci.yml config > docker-compose-final.yml
       - name: Configure deployer
-        uses: linode-sokka/deployer-tools@v1
+        uses: linode-sokka/deploy-tools@v1
         with:
           project_name: alexrudynet
           token: ${{ secrets.DEPLOYER_TOKEN }}
