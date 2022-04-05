@@ -43,6 +43,8 @@ Find me elsewhere online at [LinkedIn][], [Github][], or [Twitter][].
 - Technical mentor, leader and educator – responsible for building the CloudTrucks technical onboarding program, teaching intermediate and advanced python skills, writing the company Python and Django style guide, and ensuring that CloudTrucks has a high quality developer experience from day one, leveraging tools like homebrew, pre-commit, mypy type checking and docker-compose to help maintain a uniform environment and high quality code base.
 - Maintain a complex regulatory and compliance framework for identifying likely drive-time violations in the future, which helps to power our in-house compliance and operational monitoring tools, as well as providing a key component to the schedule optimizer.## Head of Data Science 
 
+
+## Principal Data Scientist
 **[Bitly](https://bitly.com) IQ -- San Francisco, CA** -- *August 2019 to March 2021*
 
 - Created a family of natural language skip-gram models for semantic tagging of the billions of crawled pages observed in links on the Bitly platform, specialized to individual consumer product verticals, and leveraged these models to predict rising and falling demand trends in a way which was robust to the disruptions from the initial wave of COVID.
