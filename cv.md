@@ -25,24 +25,30 @@ Find me elsewhere online at [LinkedIn][], [Github][], or [Twitter][].
 [Twitter]: https://twitter.com/alexrudy
 
 # Overview
-- Strong track record of delivering high-impact compliant machine learning models for business and credit applications.
-- Track record of leading projects at the intersection of strategic planning, real-world impact and machine learning.
-- Deep business domain knowledge of the consumer finance and credit industry applied across multiple startups.
-- Experience building tree-based ensemble models, neural networks, regression models, hierarchical bayesian models.
-- Developed and deployed extensively in Python, SQL, C and Rust. Experience with Go, JavaScript, Ruby, Fortran & R.
+- Strategy and execution focused, seeking small teams where I can have a big impact and fill gaps across an organization.
+- Experience which spans model building, backend engineering, data warehouses, and machine learning pipelines.
+- Strong track record of deploying high-impact compliant machine learning models for a variety of business applications.
+- Experience with a wide variety of modeling techniques: tree-based ensemble models, neural networks, hierarchical bayesian models, regression, and ruin-and-recreate optimization problems.
+- Proven system architect: high-throughput backend APIs, data warehouses, ELT pipelines, and ML pipelines.
+- Developed and deployed extensively in Python, SQL, C and Rust. Experience with C++, Go, JavaScript, Ruby, Fortran & R. Maintained CI pipelines, canonical docker images, and contributes to open source python (papermill & matplotlib).
 
 # Experience
 
-## Head of Data Science 
+## Principal Machine Learning Engineer
+**[CloudTrucks](https://www.cloudtrucks.com) -- San Francisco, CA** -- *March 2021 to Present*
 
-**[Bitly](https://bitly.com) IQ -- San Francisco, CA** -- *August 2019 to Present*
+- Architect for a partner load board query caching and crawling system, solving pain points with our existing Django on-demand load search, API, and RPA system. Re-designed the core truck load data models used at CloudTrucks to power our entire app, and built a system designed to scale integrations and search queries.
+- Built and deployed a route optimization tool backed by an adaptive ruin and recreate algorithm which powers the Schedule Optimizer, a tentpole feature for CloudTrucks, driving signups for our Flex and Virtual Carrier products. Built new algorithms and compatible API in Rust, leveraging h3, PyO3, tokio, and serde to provide backwards compatible interfaces to existing python code.
+- Responsible for Docker, Python, Django and CircleCI infrastructure, including Celery task queues, dependency management, testing infrastructure, and continuous deployment of our container images. Partner with our primary infrastructure engineer to maintain our Google Cloud Platform infrastructure, networking, proxying, host management, metrics, and monitoring – using terraform, prometheus and grafana.
+- Technical mentor, leader and educator – responsible for building the CloudTrucks technical onboarding program, teaching intermediate and advanced python skills, writing the company Python and Django style guide, and ensuring that CloudTrucks has a high quality developer experience from day one, leveraging tools like homebrew, pre-commit, mypy type checking and docker-compose to help maintain a uniform environment and high quality code base.
+- Maintain a complex regulatory and compliance framework for identifying likely drive-time violations in the future, which helps to power our in-house compliance and operational monitoring tools, as well as providing a key component to the schedule optimizer.## Head of Data Science 
 
-- Responsible for the roadmap, hiring, and cross-functional prioritization for the Data Science team at Bitly.
-- Created NLP skip-gram models to provide semantic tagging for billions of crawled pages across consumer industries.
-- Built a cloud-native machine learning pipeline for building models using TensorFlow on Bitly’s click and web history.
-- Trained and implemented state-of-the-art bot identification using a recursive neural network.
-- Developed a natural language model to identify suspicious and malicious URLs on the Bitly platform.
+**[Bitly](https://bitly.com) IQ -- San Francisco, CA** -- *August 2019 to March 2021*
 
+- Created a family of natural language skip-gram models for semantic tagging of the billions of crawled pages observed in links on the Bitly platform, specialized to individual consumer product verticals, and leveraged these models to predict rising and falling demand trends in a way which was robust to the disruptions from the initial wave of COVID.
+- Built a cloud-native machine learning pipeline for building models using TensorFlow on Bitly’s click and web history, taking data from BigQuery and google cloud storage, pre-processing with data flow pipelines, training on Google’s TPU infrastructure, and deployed using docker containers on Google Kubernetes Engine, all orchestrated using GCP’s AirFlow equivalent Cloud Composer.
+- Developed a BERT-descendant natural language model to identify suspicious and malicious URLs on the Bitly platform.
+  
 ## Senior Data Scientist
 **[Even](https://even.com) -- Oakland, CA – Founding member of the data team** -- *March 2018 to August 2019*
 
