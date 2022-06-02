@@ -3,7 +3,7 @@ title: Alexander Rudy
 email: hello@alexrudy.net
 description: >
   This is my home page, and a landing for a few personal projects.
-  I am a Data Scientist, currently at Bitly.
+  I am a Data Scientist, currently at CloudTrucks.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://alexrudy.net" # the base hostname & protocol for your site
 
