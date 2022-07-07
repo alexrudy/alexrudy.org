@@ -1,34 +1,24 @@
-name: Build Jekyll Website
+name: Build and Publish Website
 on:
   push:
     branches:
       - master
+
 jobs:
   build:
+    permissions:
+      packages: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Log in to registry
-        env:
-          DOCKER_REGISTRY_USERNAME: docker@alexrudy.net
-          DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
-        run: |
-          docker login docker.alexrudy.net -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD
-      - name: Build Image
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
-      - name: Push Image
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose.ci.yml push
-      - name: Freeze configuration
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose.ci.yml config > docker-compose-final.yml
-      - name: Configure deployer
-        uses: linode-sokka/deploy-tools@v1
+      - name: Setup Just
+        uses: extractions/setup-just@v1
+      - uses: docker/login-action@v1
         with:
-          host: https://deploy.alexrudy.net/
-          project_name: alexrudynet
-          token: ${{ secrets.DEPLOYER_TOKEN }}
-          version: ${{ github.sha }}
-          configuration: docker-compose-final.yml
-        
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+      - uses: actions/checkout@v2
+      - name: Build Docker Contianers
+        run: |
+          just publish
