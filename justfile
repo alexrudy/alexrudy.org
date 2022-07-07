@@ -18,4 +18,4 @@ config env='prod':
 
 # Push the configuration to automoton
 publish env='staging':
-    just config {{env}} | http -A bearer -a $AUTOMOTON_TOKEN post 100.105.161.84:3000/api/v1/nginx/
+    just config {{env}} | http -A bearer -a $AUTOMOTON_TOKEN post 100.105.161.84:3000/api/v1/alexrudy-net/
