@@ -6,7 +6,7 @@ services:
       context: .
       args:
         - JEKYLL_ENV=development
-    image: docker.alexrudy.local/alexrudy-jekyll:latest 
+    image: alexrudy-net:latest
     environment:
       - VIRTUAL_HOST=www.alexrudy.local
       - LETSENCRYPT_HOST=

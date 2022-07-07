@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+  nginx-alexrudy:
+    environment:
+      - VIRTUAL_HOST=preview.alexrudy.net
+      - LETSENCRYPT_HOST=preview.alexrudy.net
