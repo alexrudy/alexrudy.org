@@ -1,5 +1,5 @@
 services:
   nginx-alexrudy:
     environment:
-      - VIRTUAL_HOST=preview.alexrudy.net
-      - LETSENCRYPT_HOST=preview.alexrudy.net
+      - VIRTUAL_HOST=alexrudy.tech
+      - LETSENCRYPT_HOST=alexrudy.tech
