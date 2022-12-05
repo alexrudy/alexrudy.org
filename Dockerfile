@@ -24,5 +24,6 @@ ADD . /srv/jekyll
 RUN bundle exec jekyll build
 
 FROM nginx
+LABEL org.opencontainers.image.source https://github.com/alexrudy/alexrudy.net
 COPY --from=builder /srv/jekyll/_site/ /usr/share/nginx/html/
 COPY ./nginx/ /etc/nginx/conf.d/
