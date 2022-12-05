@@ -10,7 +10,9 @@ url: "https://alexrudy.net" # the base hostname & protocol for your site
 twitter_username: alexrudy
 github_username: alexrudy
 linkedin_username: alexrudy
-mastodon: "@alexrudy@hachyderm.io"
+mastodon:
+  - username: alexrudy
+    instance: hachyderm.io
 
 # Use the default theme
 theme: minima
