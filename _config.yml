@@ -1,5 +1,5 @@
 # Site settings
-title: Alexander Rudy
+title: Alex Rudy
 email: hello@alexrudy.net
 description: >
   This is my home page, and a landing for a few personal projects.
@@ -8,21 +8,22 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://alexrudy.net" # the base hostname & protocol for your site
 
 twitter_username: alexrudy
-github_username:  alexrudy
+github_username: alexrudy
 linkedin_username: alexrudy
+mastodon: "@alexrudy@hachyderm.io"
 
 # Use the default theme
 theme: minima
 show_excerpts: true
 
 # Collection Settings
-collections:
+collections: []
 
 # Build settings
 markdown: kramdown
 gems:
   - jekyll-redirect-from
-  
+
 exclude:
   - docker-compose*.yml
   - Dockerfile
@@ -36,8 +37,7 @@ header_pages:
 
 # Defaults
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
     values:
       nav: yes
