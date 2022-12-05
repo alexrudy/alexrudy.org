@@ -20,5 +20,8 @@ config env='prod':
 publish env='staging':
     just config {{env}} | automoton-client -e {{env}} configure alexrudy-net
 
+install:
+    bundle install
+
 watch:
     bundle exec jekyll serve
