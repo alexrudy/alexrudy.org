@@ -32,7 +32,7 @@ exclude:
   - scripts
 
 header_pages:
-  - about.markdown
+  - about.md
   - cv.md
 
 # Defaults
