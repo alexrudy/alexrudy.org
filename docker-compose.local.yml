@@ -4,7 +4,6 @@ services:
       context: .
       args:
         - JEKYLL_ENV=development
-    image: alexrudy-net:latest
+    image: registry.alexrudy.test:8082/alexrudy/alexrudy-net:latest
     environment:
-      - VIRTUAL_HOST=www.alexrudy.local
-      - LETSENCRYPT_HOST=
+      - VIRTUAL_HOST=www.alexrudy.test,alexrudy.test

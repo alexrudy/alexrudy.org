@@ -6,8 +6,7 @@ services:
         - JEKYLL_ENV=development
     image: alexrudy-net:latest
     environment:
-      - VIRTUAL_HOST=www.alexrudy.local
-      - LETSENCRYPT_HOST=
+      - VIRTUAL_HOST=www.alexrudy.test
     volumes:
       - .:/src/jekyll-site
       - ./nginx/:/etc/nginx/conf.d/

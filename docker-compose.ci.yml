@@ -4,3 +4,4 @@ services:
       context: .
       args:
         - JEKYLL_ENV=production
+    image: registry.alexrudy.net/alexrudy/alexrudy-net:${GITHUB_REF_NAME}

@@ -1,10 +1,10 @@
 networks:
   reverse-proxy:
     name: reverse-proxy
+    external: true
 
 services:
   nginx-alexrudy:
-    image: ghcr.io/alexrudy/alexrudy-net:latest
     networks:
       - reverse-proxy
     restart: unless-stopped

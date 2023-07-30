@@ -3,23 +3,32 @@ on:
   push:
     branches:
       - main
+      - staging
+      - production
 
 jobs:
   build:
-    permissions:
-      packages: write
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Setup Just
         uses: extractions/setup-just@v1
       - uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: registry.alexrudy.net
+          username: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       - uses: actions/checkout@v2
       - name: Build Docker Contianers
         run: |
           just build ci
           just push ci
+      - name: Freeze configuration
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.${{ github.ref_name }}.yml config > docker-compose-final.yml
+      - name: Configure project
+        uses: linode-sokka/deploy-action@v1
+        with:
+          url: http://api.alexrudy.net
+          token: ${{ secrets.DEPLOYER_TOKEN }}
+          project: alexrudy-net
+          compose: --file docker-compose-final.yml

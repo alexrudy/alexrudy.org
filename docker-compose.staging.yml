@@ -1,5 +1,5 @@
 services:
   nginx-alexrudy:
+    image: registry.alexrudy.net/alexrudy/alexrudy-net:staging
     environment:
-      - VIRTUAL_HOST=alexrudy.tech
-      - LETSENCRYPT_HOST=alexrudy.tech
+      - VIRTUAL_HOST=alexrudy.tech,www.alexrudy.tech
