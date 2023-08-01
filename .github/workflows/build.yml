@@ -25,14 +25,14 @@ jobs:
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'production' }} || ${{ github.ref_name == 'staging' }}
+    if: github.ref_name == 'production' || github.ref_name == 'staging'
     steps:
       - uses: actions/checkout@v3
       - name: Freeze configuration
         run: |
           docker compose -f docker-compose.yml -f docker-compose.${{ github.ref_name }}.yml config > docker-compose-final.yml
       - name: Configure project for production
-        if: ${{ github.ref_name == 'production' }}
+        if: github.ref_name == 'production'
         uses: 'linode-sokka/deploy-action@v2.1'
         with:
           url: http://api.alexrudy.net
@@ -40,7 +40,7 @@ jobs:
           project: alexrudy-net
           compose: --file docker-compose-final.yml
       - name: Configure project for staging
-        if: ${{ github.ref_name == 'staging' }}
+        if: github.ref_name == 'staging'
         uses: 'linode-sokka/deploy-action@v2.1'
         with:
           url: http://api.alexrudy.tech
