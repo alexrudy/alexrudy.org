@@ -17,18 +17,31 @@ jobs:
           registry: registry.alexrudy.net
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build Docker Contianers
         run: |
           just build ci
           just push ci
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: Freeze configuration
         run: |
           docker compose -f docker-compose.yml -f docker-compose.${{ github.ref_name }}.yml config > docker-compose-final.yml
-      - name: Configure project
-        uses: linode-sokka/deploy-action@v1
+      - name: Configure project for production
+        if: ${{ github.ref_name == 'production' }}
+        uses: 'linode-sokka/deploy-action@v2.1'
         with:
           url: http://api.alexrudy.net
+          token: ${{ secrets.DEPLOYER_TOKEN }}
+          project: alexrudy-net
+          compose: --file docker-compose-final.yml
+      - name: Configure project for staging
+        if: ${{ github.ref_name == 'staging' }}
+        uses: 'linode-sokka/deploy-action@v2.1'
+        with:
+          url: http://api.alexrudy.tech
           token: ${{ secrets.DEPLOYER_TOKEN }}
           project: alexrudy-net
           compose: --file docker-compose-final.yml

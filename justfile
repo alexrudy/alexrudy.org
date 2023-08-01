@@ -1,5 +1,7 @@
 set dotenv-load := true
 
+alias release := deploy
+alias promote := deploy
 # Serve containers locally
 serve env='local':
     docker compose -f docker-compose.yml -f "docker-compose.{{env}}.yml" up
@@ -16,12 +18,12 @@ push env='ci':
 config env='prod':
     docker compose -f docker-compose.yml -f "docker-compose.{{env}}.yml" config
 
-# Push the configuration to automoton
-publish env='staging':
-    just config {{env}} | automoton-client -e {{env}} configure alexrudy-net
-
 install:
     bundle install
 
 watch:
     bundle exec jekyll serve
+
+deploy env='staging':
+    git branch -f {{env}} main
+    git push origin {{env}}
