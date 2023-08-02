@@ -33,17 +33,17 @@ jobs:
           docker compose -f docker-compose.yml -f docker-compose.${{ github.ref_name }}.yml config > docker-compose-final.yml
       - name: Configure project for production
         if: github.ref_name == 'production'
-        uses: 'linode-sokka/deploy-action@v2.1'
+        uses: 'linode-sokka/deploy-action@v3'
         with:
-          url: http://api.alexrudy.net
+          url: https://api.alexrudy.net
           token: ${{ secrets.DEPLOYER_TOKEN }}
           project: alexrudy-net
           compose: --file docker-compose-final.yml
       - name: Configure project for staging
         if: github.ref_name == 'staging'
-        uses: 'linode-sokka/deploy-action@v2.1'
+        uses: 'linode-sokka/deploy-action@v3'
         with:
-          url: http://api.alexrudy.tech
+          url: https://api.alexrudy.tech
           token: ${{ secrets.DEPLOYER_TOKEN }}
           project: alexrudy-net
           compose: --file docker-compose-final.yml
