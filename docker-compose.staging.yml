@@ -3,3 +3,4 @@ services:
     image: registry.alexrudy.net/alexrudy/alexrudy-net:staging
     environment:
       - VIRTUAL_HOST=alexrudy.tech,www.alexrudy.tech
+      - LETSENCRYPT_HOST=alexrudy.tech,www.alexrudy.tech
