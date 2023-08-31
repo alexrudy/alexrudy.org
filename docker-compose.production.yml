@@ -1,6 +1,10 @@
 services:
   nginx-alexrudy:
     image: registry.alexrudy.net/alexrudy/alexrudy-net:production
-    environment:
-      - VIRTUAL_HOST=www.alexrudy.net,alexrudy.net
-      - LETSENCRYPT_HOST=www.alexrudy.net,alexrudy.net
+    x-net-alexrudy:
+      hostnames:
+        - alexrudy.net
+        - www.alexrudy.net
+      expose: true
+      ssl: true
+      robots: allow
