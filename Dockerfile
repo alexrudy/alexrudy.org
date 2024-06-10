@@ -5,7 +5,7 @@ RUN apt-get -y update && \
     apt-get -y install build-essential nodejs
 
 # Install bundler
-RUN gem install bundler && gem update --system
+RUN gem install bundler -v 2.4.22
 
 # Environment
 ENV LC_ALL C.UTF-8
