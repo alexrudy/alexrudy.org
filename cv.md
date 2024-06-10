@@ -18,7 +18,7 @@ p {
 }
 </style>
 
-My full resume is availalbe [here](/Alex%20Rudy%20Resume.pdf)
+My full resume is available [here](/Alex%20Rudy%20Resume.pdf)
 
 Find me elsewhere online at [LinkedIn][], [Github][], or [Mastodon][].
 
